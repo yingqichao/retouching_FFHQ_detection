@@ -1,0 +1,62 @@
+#### models path dirs
+focal_alpha: 0.5
+network_arch: resnet_cnn_attention_plugin #convnextv1 #shunt_convnext, conformer, efficient
+
+# history of checkpoints: note they might not exist any more
+## non-robust: Epoch4_105999_ViT 0.435
+#model_load_number: resnet_cnn_attention_plugin/393418_6_ViT.pth
+## robust: Epoch4_105999_ViT 0.435
+#Epoch13_207999_ViT
+model_load_number: megvii_resnet_cnn_attention_plugin/Epoch2_37999_ViT.pth
+#### general settings
+conduct_train: true
+conduct_test: true
+test_save_checkpoint: true
+gpu_ids: [4]
+operations_list: ['none','single','dual','three','four']
+test_operation_list: ['single','dual','three','four']
+#operations_list: ['four']
+task_name: megvii_resnet_cnn_attention_plugin
+
+restart_step: 1000
+model_save_period: 2000
+
+with_dual_process: false
+
+datasets:
+  train:
+    name: Rerun
+    mode: LQGT
+#    dataroot_GT: /qichaoying/Downloads/Invertible-Image-Rescaling-master/icassp_real/images    # Test images
+#    dataroot_GT: /groupshare//Places/data_256                                        # Places
+#    dataroot_GT: /groupshare/CelebA/img/img_celeba_200                                          # CelebA
+#    dataroot_GT: /groupshare/paris_street_view/paris_train                            # ParisStreetView
+    dataroot_GT: /groupshare/ISP_results/xxhu_test/UNet/FORGERY_0                                   # COCO
+#    dataroot_GT: /groupshare//Flickr1024/train                                 # Flicker
+#    dataroot_GT: /groupshare//DIV2K_valid                                # DIV2K
+#    dataroot_GT: /groupshare//VOC2012/JPEGImages
+#    dataroot_GT: /groupshare//UCID_color/images                                                 # UCID
+#    dataroot_GT: /groupshare//ILSVRC2012_img_val                                      # ImageNet
+    dataroot_LQ: /groupshare/ISP_results/xxhu_test/UNet/MASK
+
+    use_shuffle: true
+    n_workers: 4 # per GPU
+
+    batch_size: 16 # 32 for hierarchical
+    GT_size: 512 # 608
+
+    color: RGB
+
+  val:
+    name: val_DIV2K
+    mode: LQGT
+    dataroot_GT: /groupshare/ISP_results/xxhu_test/UNet/FORGERY_0
+    dataroot_LQ: /groupshare/ISP_results/xxhu_test/UNet/MASK # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    GT_size: 512
+
+
+train:
+  lr_CNN: !!float 1e-4
+  lr_transformer: !!float 5e-5
+  beta1: 0.9 #0.9
+  beta2: 0.999 #0.999

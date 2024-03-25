@@ -1,0 +1,8 @@
+simulated_resize_indices: [0]
+simulated_gblur_indices: [1]
+simulated_mblur_indices: [2]
+simulated_AWGN_indices: [3]
+simulated_strong_JPEG_indices: [4]
+simulated_weak_JPEG_indices: [5]
+
+minimum_PSNR_caused_by_attack: 25

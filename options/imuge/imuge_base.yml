@@ -1,0 +1,79 @@
+
+# history of checkpoints: note they might not exist any more
+## best performance: 0.967 0.759
+## robust: Epoch2_105999_ViT 0.708
+## non-robust tencent: resnet_token_attention_plugin/954775_12_ViT
+# # latest 04.26: 153325_10_ViT.pth
+model_load_number: Epoch0_59999_ViT.pth #Epoch0_129999_ViT.pth
+
+#### general settings
+network_arch: unet #convnextv1 #shunt_convnext, conformer, efficient
+conduct_test: false
+test_save_checkpoint: true
+train_recover: false
+with_data_aug: false
+skip_calibrate: true
+gpu_ids: [2,3]
+
+conduct_test_inverval_samples: 5000
+conduct_in_batch_test: false
+
+
+
+####### if test on alibaba #######
+#conduct_train: false
+#train_dataset: megvii
+#test_dataset: alibaba
+#save_checkpoint: false
+#operations_list: ['none','single','dual','three','four']
+#test_operation_list: ['single']
+#task_name: megvii_DensenetToken_no_cali
+
+###### if train / test on megvii #######
+conduct_train: true
+train_dataset: megvii
+test_dataset: megvii
+save_checkpoint: true
+operations_list: ['dual','three','four'] #['none','single','dual','three','four']
+test_operation_list: ['dual','three','four'] #['none','single','dual','three','four']
+task_name: imuge_retrain
+###### if finetune / test on tencent #######
+#conduct_train: false
+#train_dataset: tencent
+#test_dataset: tencent
+#save_checkpoint: false
+#operations_list: ['none','single','dual','three','four']
+#test_operation_list: ['none','single','dual','three','four']
+#task_name: resnet_token_attention_plugin
+
+
+###### other static settings ###############
+train:
+  lr_CNN: !!float 5e-5
+  lr_transformer: !!float 5e-5
+  beta1: 0.9 #0.9
+  beta2: 0.999 #0.999
+
+restart_step: 1000
+model_save_period: 10000
+
+
+
+datasets:
+  train:
+    mode: LQGT
+
+    use_shuffle: true
+    n_workers: 4 # per GPU
+
+    batch_size: 8 # 32 for hierarchical
+    GT_size: 256 # 608
+
+    color: RGB
+
+  val:
+    name: val_DIV2K
+    mode: LQGT
+    dataroot_GT: /groupshare/ISP_results/xxhu_test/UNet/FORGERY_0
+    dataroot_LQ: /groupshare/ISP_results/xxhu_test/UNet/MASK # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    GT_size: 256

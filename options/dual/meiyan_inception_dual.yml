@@ -1,0 +1,75 @@
+#### models path dirs
+focal_alpha: 0.5
+network_arch: inception #convnextv1 #shunt_convnext, conformer, efficient
+
+## checkpoint stack
+#baseline_conformer_dual_512/Epoch2_77999_ViT.pth
+#baseline_conformer_512/Epoch16_931999_ViT.pth #Epoch30_847999_ViT.pth
+#baseline_inception_dual_512/Epoch2_155999_ViT.pth
+## previous: non-robust rencent
+#baseline_inception_dual_512/Epoch1_105999_ViT.pth:
+
+model_load_number: baseline_inception_dual_512/200312_2_ViT.pth #
+#### general settings
+conduct_test: true
+test_save_checkpoint: true
+with_data_aug: true
+gpu_ids: [3]
+
+restart_step: 1000
+model_save_period: 2000
+
+####### if test on alibaba #######
+#conduct_train: false
+#train_dataset: megvii
+#test_dataset: alibaba
+#save_checkpoint: false
+#operations_list: ['none','single','dual','three','four']
+#test_operation_list: ['single']
+#task_name: baseline_inception_dual_512
+###### if train / test on megvii #######
+conduct_train: false
+train_dataset: megvii
+test_dataset: megvii
+save_checkpoint: false
+operations_list: ['none','single','dual','three','four']
+test_operation_list: ['three','four']
+task_name: baseline_inception_dual_512
+
+datasets:
+  train:
+    name: Rerun
+    mode: LQGT
+#    dataroot_GT: /qichaoying/Downloads/Invertible-Image-Rescaling-master/icassp_real/images    # Test images
+#    dataroot_GT: /groupshare//Places/data_256                                        # Places
+#    dataroot_GT: /groupshare/CelebA/img/img_celeba_200                                          # CelebA
+#    dataroot_GT: /groupshare/paris_street_view/paris_train                            # ParisStreetView
+    dataroot_GT: /groupshare/ISP_results/xxhu_test/UNet/FORGERY_0                                   # COCO
+#    dataroot_GT: /groupshare//Flickr1024/train                                 # Flicker
+#    dataroot_GT: /groupshare//DIV2K_valid                                # DIV2K
+#    dataroot_GT: /groupshare//VOC2012/JPEGImages
+#    dataroot_GT: /groupshare//UCID_color/images                                                 # UCID
+#    dataroot_GT: /groupshare//ILSVRC2012_img_val                                      # ImageNet
+    dataroot_LQ: /groupshare/ISP_results/xxhu_test/UNet/MASK
+
+    use_shuffle: true
+    n_workers: 2 # per GPU
+
+    batch_size: 8 # 32 for hierarchical
+    GT_size: 512 # 608
+
+    color: RGB
+
+  val:
+    name: val_DIV2K
+    mode: LQGT
+    dataroot_GT: /groupshare/ISP_results/xxhu_test/UNet/FORGERY_0
+    dataroot_LQ: /groupshare/ISP_results/xxhu_test/UNet/MASK # path to validation reference LR images, not necessary, if not provided, LR images will be generated in dataloader
+    GT_size: 512
+
+
+train:
+  lr_CNN: !!float 1e-4
+  lr_transformer: !!float 5e-5
+  beta1: 0.9 #0.9
+  beta2: 0.999 #0.999
