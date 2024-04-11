@@ -7,7 +7,10 @@ Paper: https://dl.acm.org/doi/pdf/10.1145/3581783.3611843
 
 Dataset request: https://fdmas.github.io/Application_RetouchingFFHQ_new.pdf
 
-Should you encounter problem, contact me via shinydotcom@163.com. Thanks!
+checkpoints: https://drive.google.com/drive/folders/1bovqkik33bmwxtubtxlt6zljwpbogaqw?usp=sharing
+(the files are renamed upon upload. please refer to meiyan_ckpt2yml.txt)
+
+Should you encounter problem, contact me via shinydotcom@163.com, or open issues. Thanks!
 
 为了方便阅读，本说明文件尽量用中文来表示
 ## 文件架构介绍
